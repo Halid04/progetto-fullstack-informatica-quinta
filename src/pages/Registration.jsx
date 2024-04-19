@@ -100,7 +100,7 @@ function Registration() {
         <form
           method="POST"
           action=""
-          className="z-[20] h-full w-[60%] md:h-[80%] xl:w-[45%] flex flex-col justify-center items-center ml-5 md:ml-14"
+          className="z-[20] h-full w-[60%] xl:w-[45%] flex flex-col justify-center items-center ml-5 md:ml-14"
         >
           <div className="w-full h-1/2 md:h-1/4 flex flex-col items-start justify-center gap-4">
             <h1 className="text-4xl md:text-5xl font-bold">
