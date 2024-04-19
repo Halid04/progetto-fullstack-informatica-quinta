@@ -10,7 +10,7 @@ import "./App.css";
 function App() {
   return (
     <HashRouter>
-      <div className="h-[100dvh] w-full bg-white flex flex-col justify-between items-center">
+      <div className="h-[100vh] w-full bg-white flex flex-col justify-between items-center">
         <Header />
         <div className="h-full w-full">
           <Routes>

@@ -100,7 +100,7 @@ function Registration() {
         <form
           method="POST"
           action=""
-          className="z-[15] h-full w-[60%] flex flex-col justify-center items-center gap-5 md:gap-0 ml-5 md:ml-14"
+          className="z-[20] h-full w-[60%] md:h-[80%] xl:w-[45%] flex flex-col justify-center items-center ml-5 md:ml-14"
         >
           <div className="w-full h-1/2 md:h-1/4 flex flex-col items-start justify-center gap-4">
             <h1 className="text-4xl md:text-5xl font-bold">
@@ -114,8 +114,8 @@ function Registration() {
             </h2>
           </div>
           <div className="w-full h-1/2 md:h-[60%] flex flex-col items-start justify-center gap-5">
-            <div className="w-[60%] flex-wrap flex items-center justify-between gap-4">
-              <div className="md:w-[12.9rem] flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
+            <div className="w-[60%] flex-wrap lg:w-[65%] xl:w-[75%] 2xl:w-[65%] xl:flex-nowrap flex items-center justify-between gap-4">
+              <div className="md:w-[12.9rem] 2xl:w-1/2 flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
                 <div className="flex flex-col items-start justify-center ">
                   <label
                     htmlFor="userNameInput"
@@ -138,7 +138,7 @@ function Registration() {
                 </div>
               </div>
 
-              <div className="md:w-[12.9rem] flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
+              <div className="md:w-[12.9rem] 2xl:w-1/2 flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
                 <div className="flex flex-col items-start justify-center ">
                   <label
                     htmlFor="userSurnameInput"
@@ -162,8 +162,8 @@ function Registration() {
               </div>
             </div>
 
-            <div className="w-[60%] flex-wrap flex items-center justify-between gap-4">
-              <div className="md:w-[12.9rem] flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
+            <div className="w-[60%] flex-wrap lg:w-[65%] xl:w-[75%] 2xl:w-[65%] xl:flex-nowrap flex items-center justify-between gap-4">
+              <div className="md:w-[12.9rem] 2xl:w-1/2 flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
                 <div className="flex flex-col items-start justify-center ">
                   <label
                     htmlFor="userBirthdateInput"
@@ -186,7 +186,7 @@ function Registration() {
                 </div>
               </div>
 
-              <div className="md:w-[12.9rem] flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
+              <div className="md:w-[12.9rem] 2xl:w-1/2 flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
                 <div className="flex flex-col items-start justify-center ">
                   <label
                     htmlFor="userPhoneNumberInput"
@@ -210,8 +210,8 @@ function Registration() {
               </div>
             </div>
 
-            <div className="w-[60%] flex-wrap flex items-center justify-start">
-              <div className="w-[100vw] flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
+            <div className="w-[60%] lg:w-[65%] xl:w-[75%] 2xl:w-[65%] flex-wrap md:flex-nowrap flex items-center justify-start">
+              <div className="w-[12.9rem] lg:w-[100vw] flex items-center justify-between bg-[#010E22] px-2 py-2 rounded-md">
                 <div className="flex flex-col items-start justify-center ">
                   <label
                     htmlFor="userPasswordInput"
@@ -241,17 +241,17 @@ function Registration() {
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-[60%] flex items-center justify-between gap-3 md:gap-1">
+            <div className="w-[60%] flex-wrap lg:w-[65%] xl:w-[75%] 2xl:w-[65%]  xl:flex-nowrap flex items-center justify-between gap-4">
               <button
                 type="submit"
-                className="w-[12.9rem] bg-[#0074CC] border-2 border-[#0074CC] px-2 py-2 rounded-full font-bold text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out"
+                className="w-[12.9rem] 2xl:w-1/2 bg-[#0074CC] border-2 border-[#0074CC] px-2 py-2 rounded-full font-bold text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out"
                 onClick={(e) => handleRegistrationSubmit(e)}
               >
                 Registrati
               </button>
               <button
                 type="button"
-                className="w-[12.9rem] bg-[#010E22] border-2 border-[#0074CC] px-2 py-2 rounded-full font-bold text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out"
+                className="w-[12.9rem] 2xl:w-1/2 bg-[#010E22] border-2 border-[#0074CC] px-2 py-2 rounded-full font-bold text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out"
                 onClick={() => navigate("/")}
               >
                 Annulla
