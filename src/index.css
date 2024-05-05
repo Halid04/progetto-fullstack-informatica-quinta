@@ -14,3 +14,11 @@ body {
 #userBirthdateInput::-webkit-calendar-picker-indicator {
   display: none;
 }
+
+.p-dialog-header {
+  display: none;
+}
+
+.p-dialog-content {
+  width: 100%;
+}
