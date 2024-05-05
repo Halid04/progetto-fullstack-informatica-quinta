@@ -27,7 +27,7 @@ function Registration() {
 
   const handleRegistrationSubmit = (e) => {
     e.preventDefault();
-
+ 
     if (
       userName === "" ||
       userSurname === "" ||
@@ -37,6 +37,21 @@ function Registration() {
     ) {
       alert("Tutti i campi sono obbligatori, per favore riempili tutti.");
     } else {
+      // Effettua il controllo sull'età minima
+      const currentDate = new Date();
+      const birthdate = new Date(userBirthdate);
+      const age = currentDate.getFullYear() - birthdate.getFullYear();
+      if (age < 16) {
+        alert("Devi avere almeno 16 anni per registrarti.");
+        return; // Esce dalla funzione se l'età è inferiore a 16
+      }
+
+      // Effettua il controllo sulla lunghezza della password
+      if (userPassword.length < 8) {
+        alert("La password deve contenere almeno 8 caratteri.");
+        return; // Esce dalla funzione se la password è troppo corta
+      }
+
       let url =
         "http://localhost/progetto-fullstack-informatica-quinta/registration.php";
       let headers = {
@@ -57,14 +72,16 @@ function Registration() {
         body: JSON.stringify(data),
       })
         .then((response) => {
-          if (response.ok) {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
             setTimeout(() => {
               setRegistrationDone(true); // Imposta lo stato registrationDone su true
             }, 500);
+          } else {
+            alert(data.message);
           }
-          return response.json();
-        }) // Aggiungi il ritorno di chiamata then
-        .then((data) => {
           // Gestisci i dati restituiti dal server
           console.log(data); // Mostra i dati restituiti dal server nella console
           // Aggiungi qui la logica per gestire la risposta dal server, ad esempio mostrare un messaggio all'utente

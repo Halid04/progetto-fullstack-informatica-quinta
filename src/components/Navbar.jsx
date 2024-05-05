@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <>
-      <div className="w-1/3 flex justify-end">
+      <div className="w-1/3 flex justify-end ">
         <div className="hidden justify-center gap-5 items-center text-lg md:flex">
           <NavLinks />
         </div>

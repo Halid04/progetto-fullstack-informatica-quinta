@@ -9,8 +9,8 @@ function Login() {
   const [userName, setUserName] = useState("");
   const [userSurname, setUserSurname] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState(false); // [false, true]
-  const [loginMessage, setLoginMessage] = useState(""); // ["", "Messaggio di errore"]
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [loginMessage, setLoginMessage] = useState("");
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -47,18 +47,24 @@ function Login() {
           return response.json();
         })
         .then((data) => {
+          console.log(data);
           if (data.login) {
+            localStorage.setItem("userId", data.id);
+            localStorage.setItem("userName", data.nome);
+            localStorage.setItem("userSurname", data.cognome);
+
+            localStorage.setItem("isAdmin", data.admin);
+
             setTimeout(() => {
               navigate("/account");
             }, 500);
           }
-
+          localStorage.setItem("isLogged", data.login);
           setLoginStatus(data.login);
           setLoginMessage(data.message);
         })
         .catch((error) => {
           console.log(error);
-          // Gestisci gli errori
         });
     }
   };
