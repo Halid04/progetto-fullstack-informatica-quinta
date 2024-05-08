@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card from "../components/Card";
-import { ListFilter } from "lucide-react";
+import { ListFilter, Eye } from "lucide-react";
 import { Dialog } from "primereact/dialog";
 
 function Camere() {
@@ -13,21 +13,31 @@ function Camere() {
     doppia: true,
     suite: true,
     postiLetto: 1,
-    zeroCento: true,
-    centoDuecento: true,
-    duecentoTrecento: true,
+    prezzo: "centoDuecento",
     checkInDate: getTodayDate(), // Imposta la data di check-in predefinita come quella di oggi
     checkOutDate: getTomorrowDate(), // Imposta la data di check-out predefinita come quella di oggi
   });
 
   useEffect(() => {
+    getAllCamere();
+  }, []);
+
+  const getAllCamere = () => {
     fetch("http://localhost/progetto-fullstack-informatica-quinta/camere.php")
       .then((response) => response.json())
-      .then((data) => setCamere(data))
+      .then((data) => {
+        console.log(data);
+        setCamere(data);
+      })
       .catch((error) =>
         console.error("Errore durante il recupero delle camere:", error)
       );
-  }, []);
+  };
+
+  const handleCancellaFiltri = () => {
+    getAllCamere();
+    setIsDialogOpen(false);
+  };
 
   const handleCheckInChange = (event) => {
     const today = new Date();
@@ -74,13 +84,13 @@ function Camere() {
       return;
     }
 
-    if (
-      !formData.zeroCento &&
-      !formData.centoDuecento &&
-      !formData.duecentoTrecento
-    ) {
-      alert("Seleziona almeno un intervallo di prezzo");
-      return;
+    if (formData.postiLetto > 1) {
+      formData.singola = false;
+    }
+
+    if (formData.postiLetto > 2) {
+      formData.singola = false;
+      formData.doppia = false;
     }
 
     let url =
@@ -114,10 +124,20 @@ function Camere() {
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     const newValue = type === "checkbox" ? checked : value;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: newValue,
-    }));
+
+    // Gestione specifica per i radio button
+    if (type === "radio") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        prezzo: value, // Imposta il valore dell'opzione prezzo
+      }));
+    } else {
+      // Gestione generale per gli altri tipi di input
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: newValue,
+      }));
+    }
   };
 
   return (
@@ -133,7 +153,7 @@ function Camere() {
         <Dialog
           visible={isDialogOpen}
           className="w-[45vw] h-[55vh] flex flex-col justify-center items-center gap-[200rem] bg-white shadow-[0px_0px_10px_6px_#00000024] rounded-md px-5 py-4 overflow-hidden"
-          onHide={() => setIsDialogOpen}
+          onHide={() => setIsDialogOpen(false)}
         >
           <form
             className="w-full flex flex-col justify-center items-start gap-4 overflow-hidden"
@@ -141,6 +161,14 @@ function Camere() {
             method="post"
             onSubmit={handleSubmit}
           >
+            <button
+              onClick={() => handleCancellaFiltri()}
+              className=" text-sm border-none outline-none flex justify-center items-center gap-1 hover:scale-90 transition-transform duration-300 ease-in-out"
+            >
+              <Eye color="#7E8794" />
+              <span className="font-bold text-[#7E8794]">Ripristina filti</span>
+            </button>
+
             <div className="w-full flex justify-between items-center">
               <p className="w-[40%] font-bold">Tipo camera:</p>
               <div className="w-[60%] flex justify-start items-center gap-7">
@@ -205,39 +233,39 @@ function Camere() {
               <div className="w-[60%] flex justify-start items-center gap-7">
                 <div className="flex justify-center items-center gap-2">
                   <input
-                    type="checkbox"
+                    type="radio"
                     id="zeroCento"
-                    name="zeroCento"
-                    value={formData.zeroCento}
+                    name="prezzo"
+                    value="zeroCento"
                     onChange={handleChange}
                     className="accent-[#0B76B7]"
-                    checked={formData.zeroCento}
+                    checked={formData.prezzo === "zeroCento"}
                   />
                   <label htmlFor="zeroCento">0 - 100</label>
                 </div>
 
                 <div className="flex justify-center items-center gap-2">
                   <input
-                    type="checkbox"
+                    type="radio"
                     id="centoDuecento"
-                    name="centoDuecento"
-                    value={formData.centoDuecento}
+                    name="prezzo"
+                    value="centoDuecento"
                     onChange={handleChange}
                     className="accent-[#0B76B7]"
-                    checked={formData.centoDuecento}
+                    checked={formData.prezzo === "centoDuecento"}
                   />
                   <label htmlFor="centoDuecento">100 - 200</label>
                 </div>
 
                 <div className="flex justify-center items-center gap-2">
                   <input
-                    type="checkbox"
+                    type="radio"
                     id="duecentoTrecento"
-                    name="duecentoTrecento"
-                    value={formData.duecentoTrecento}
+                    name="prezzo"
+                    value="duecentoTrecento"
                     onChange={handleChange}
                     className="accent-[#0B76B7]"
-                    checked={formData.duecentoTrecento}
+                    checked={formData.prezzo === "duecentoTrecento"}
                   />
                   <label htmlFor="duecentoTrecento">200 - 300</label>
                 </div>
@@ -296,17 +324,50 @@ function Camere() {
         </Dialog>
       </div>
       <div className="h-[85%] ml-5 w-full flex items-start justify-start flex-wrap gap-x-20 gap-y-3">
-        {camere.map((camera) => (
-          <Card
-            key={camera.numeroCamera}
-            nomeCamera={camera.nomeCamera}
-            tipoCamera={camera.tipoCamera}
-            postiLetto={`${camera.postiLetto} letto`}
-            prezzo={`${camera.prezzo}€/N`}
-            descrizione={camera.descrizione}
-            nomeImmagineCamera={camera.nomeImmagineCamera}
-          />
-        ))}
+        {camere.length > 0 &&
+          camere[0].cameraTrovata &&
+          camere.map((camera) => (
+            <Card
+              key={camera.numeroCamera}
+              nomeCamera={camera.nomeCamera}
+              tipoCamera={camera.tipoCamera}
+              postiLetto={`${camera.postiLetto} letto`}
+              prezzo={`${camera.prezzo}€/N`}
+              descrizione={camera.descrizione}
+              nomeImmagineCamera={camera.nomeImmagineCamera}
+            />
+          ))}
+
+        {camere.message == "Nessuna camera trovata" &&
+          !camere.cameraTrovata && (
+            <div className="z-[15] flex flex-col justify-center items-center w-full h-full gap-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-center">
+                Nessuna camera trovata
+                <span className="text-[#0B76B7]">!</span>
+              </h1>
+              <p className="text-lg text-center md:text-xl text-[#808080]">
+                Prova a modificare i filtri per visualizzare le camere
+                disponibili
+              </p>
+              <div className="flex justify-center items-center gap-5">
+                <button
+                  type="button"
+                  onClick={() => setIsDialogOpen(true)}
+                  className="bg-[#0B76B7] border-[1.5px] px-5 py-1 rounded-md text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out"
+                >
+                  Modifica filtri
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCancellaFiltri}
+                  className="bg-trasparent border-[1.5px] border-[#0B76B7] px-5 py-1 rounded-md text-[#0B76B7] hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out"
+                >
+                  Cancella filtri
+                </button>
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );

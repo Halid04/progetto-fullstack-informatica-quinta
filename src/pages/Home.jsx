@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import homePageBgImage from "../assets/homePageBgImage.jpg";
 import { MoveRight } from "lucide-react";
 
 function Home() {
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -22,6 +24,7 @@ function Home() {
       </p>
       <button
         type="button"
+        onClick={() => navigate("/camere")}
         className="flex justify-center items-center gap-1 bg-[#0B76B7] px-5 py-1 rounded-md text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out"
       >
         <p className="md:text-lg">Vedere camere</p>
