@@ -101,6 +101,7 @@ function Camere() {
         return response.json();
       })
       .then((data) => {
+        setCamere(data);
         console.log(data);
       })
       .catch((error) => {
