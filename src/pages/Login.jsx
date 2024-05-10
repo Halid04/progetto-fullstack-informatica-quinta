@@ -52,14 +52,15 @@ function Login() {
             localStorage.setItem("userId", data.id);
             localStorage.setItem("userName", data.nome);
             localStorage.setItem("userSurname", data.cognome);
-
             localStorage.setItem("isAdmin", data.admin);
+            localStorage.setItem("isLogged", data.login);
 
             setTimeout(() => {
               navigate("/account");
+              window.location.reload();
             }, 500);
           }
-          localStorage.setItem("isLogged", data.login);
+
           setLoginStatus(data.login);
           setLoginMessage(data.message);
         })

@@ -5,12 +5,13 @@ import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import Account from "./pages/Account";
 import Camere from "./pages/Camere";
+import PrenotazioneCamera from "./pages/PrenotazioneCamera";
+import NotLogged from "./pages/NotLogged";
 import Header from "./components/Header";
 import "./App.css";
 
 function App() {
-  // localStorage.setItem("isLogged", false);
-
+  // localStorage.clear();
   return (
     <HashRouter>
       <div className="h-[100vh] w-full bg-white flex flex-col justify-between items-center">
@@ -25,6 +26,12 @@ function App() {
             <Route exact path="/registration" element={<Registration />} />
             <Route exact path="/account" element={<Account />} />
             <Route exact path="/camere" element={<Camere />} />
+            <Route exact path="/not-logged" element={<NotLogged />} />
+            <Route
+              exact
+              path="/prenotazione-camera/:numeroCamera"
+              element={<PrenotazioneCamera />}
+            />
           </Routes>
         </div>
       </div>

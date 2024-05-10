@@ -335,6 +335,7 @@ function Camere() {
               prezzo={`${camera.prezzo}€/N`}
               descrizione={camera.descrizione}
               nomeImmagineCamera={camera.nomeImmagineCamera}
+              numeroCamera={camera.numeroCamera}
             />
           ))}
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Card({
   nomeCamera,
@@ -7,9 +8,12 @@ function Card({
   prezzo,
   descrizione,
   nomeImmagineCamera,
+  numeroCamera,
 }) {
   const [imgNewPath, setImgNewPath] = useState(nomeImmagineCamera);
   const [newDescrizione, setNewDescrizione] = useState(descrizione);
+  const [isLogged, setIsLogged] = useState(localStorage.getItem("isLogged"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     const stringWithoutNumbers = nomeImmagineCamera.replace(/\d+/g, "");
@@ -27,6 +31,14 @@ function Card({
     }
   }, [nomeImmagineCamera]);
 
+  const handleNavigateToPrenotazioneCamera = (numeroCamera) => {
+    if (isLogged) {
+      navigate(`/prenotazione-camera/${numeroCamera}`);
+    } else {
+      navigate("/not-logged");
+    }
+  };
+
   return (
     <div className=" z-40 border-[1px] border-[#7E8794] cursor-pointer flex flex-col justify-start items-center w-[15rem] rounded-md hover:scale-[.95] transition-transform duration-300 ease-in-out ">
       <img
@@ -43,9 +55,11 @@ function Card({
           <span className="font-bold text-[#0B76B7]">{prezzo}</span>
         </p>
         <p>{newDescrizione}</p>
+
         <button
           type="button"
           className="bg-[#0B76B7] px-5 py-1 rounded-md text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out "
+          onClick={() => handleNavigateToPrenotazioneCamera(numeroCamera)}
         >
           Prenota subito
         </button>
