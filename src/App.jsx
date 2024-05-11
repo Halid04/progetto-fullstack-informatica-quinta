@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import Account from "./pages/Account";
 import Camere from "./pages/Camere";
+import Prenotazioni from "./pages/Prenotazioni";
 import PrenotazioneCamera from "./pages/PrenotazioneCamera";
 import NotLogged from "./pages/NotLogged";
 import Header from "./components/Header";
@@ -32,6 +33,7 @@ function App() {
               path="/prenotazione-camera/:numeroCamera"
               element={<PrenotazioneCamera />}
             />
+            <Route exact path="/prenotazioni" element={<Prenotazioni />} />
           </Routes>
         </div>
       </div>

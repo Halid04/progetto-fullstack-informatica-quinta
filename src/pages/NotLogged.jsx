@@ -11,7 +11,8 @@ function NotLogged() {
         <span className="text-[#0B76B7]">!</span>
       </h1>
       <p className="text-lg text-center md:text-xl text-[#808080]">
-        Per poter prenotare una camera devi effettuare l'accesso al tuo account.
+        Per poter accedere a questa pagina devi effettuare l'accesso al tuo
+        account.
       </p>
       <button
         type="button"

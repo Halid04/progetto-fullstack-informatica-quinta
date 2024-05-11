@@ -147,6 +147,26 @@ function PrenotazioneCamera() {
       dataPasto: document.getElementById(`pastoGiorno_${pasto.id}`).value,
     }));
 
+    // Verifica che non ci siano pasti duplicati per lo stesso giorno
+    const pastiSet = new Set();
+    let pastiDuplicati = false;
+    for (const pasto of pastiArray) {
+      const pastoKey = `${pasto.tipoPasto}_${pasto.dataPasto}`;
+      if (pastiSet.has(pastoKey)) {
+        pastiDuplicati = true;
+        break;
+      } else {
+        pastiSet.add(pastoKey);
+      }
+    }
+
+    if (pastiDuplicati) {
+      toast.error(
+        "Non è possibile selezionare gli stessi pasti per lo stesso giorno."
+      );
+      return;
+    }
+
     // Crea un array per memorizzare gli ospiti
     const ospitiArray = ospiti.map((ospite) => ({
       nomeOspite: document.getElementById(`ospiteNomeInput_${ospite.id}`).value,
@@ -175,29 +195,37 @@ function PrenotazioneCamera() {
     };
     let data = formData;
 
-    fetch(url, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
+    toast.loading("Prenotazione in corso...", { duration: 2000 });
 
-        if (data.success) {
-          notify();
-          setTimeout(() => {
-            navigate("/camere");
-          }, 1000);
-        } else {
-          alert("Errore durante la prenotazione della camera");
-        }
+    setTimeout(() => {
+      fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data),
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+
+          if (data.success) {
+            // notify();
+            toast.success("Prenotazione effettuata con successo!");
+            setTimeout(() => {
+              navigate("/camere");
+            }, 1000);
+          } else {
+            alert("Errore durante la prenotazione della camera");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(
+            "Prenotazione non riuscita. Controlla i dati inseriti e riprova un'altra volta."
+          );
+        });
+    }, 2000);
 
     // Fai qualcosa con i dati del form, ad esempio invialo a un endpoint API o memorizzalo localmente
     console.log("Dati del form:", formData);

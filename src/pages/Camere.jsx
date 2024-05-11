@@ -141,7 +141,7 @@ function Camere() {
   };
 
   return (
-    <div className="h-full w-full overflow-auto">
+    <div className="h-full w-full overflow-auto ">
       <div className="h-[15%] w-full flex justify-start items-center">
         <button
           onClick={() => setIsDialogOpen(true)}

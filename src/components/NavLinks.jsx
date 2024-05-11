@@ -52,7 +52,7 @@ function NavLinks() {
         Camere
       </NavLink>
       <NavLink
-        to="/"
+        to={isLogged ? "/prenotazioni" : "/not-logged"}
         className="text-[#808080] relative w-fit block after:block after:content-[''] after:absolute after:h-[3px] after:bg-[#0B76B7] after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left"
       >
         Prenotazioni
