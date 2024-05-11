@@ -40,8 +40,8 @@ function Camere() {
   };
 
   const handleCheckInChange = (event) => {
-    const today = new Date();
-    setCheckInDate(today.toISOString().split("T")[0]);
+    const selectedDate = event.target.value;
+    setCheckInDate(selectedDate);
 
     const nextDayDate = new Date(selectedDate);
     nextDayDate.setDate(nextDayDate.getDate() + 1);
@@ -141,7 +141,7 @@ function Camere() {
   };
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full overflow-auto">
       <div className="h-[15%] w-full flex justify-start items-center">
         <button
           onClick={() => setIsDialogOpen(true)}
