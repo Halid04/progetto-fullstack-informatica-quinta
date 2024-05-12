@@ -8,7 +8,7 @@ body {
   padding: 0;
   font-family: "Roboto", sans-serif;
   font-style: normal;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 #userBirthdateInput::-webkit-calendar-picker-indicator,
@@ -71,4 +71,23 @@ immagineCameraInPrenotazione {
   left: 0;
   z-index: 1;
   color: tomato;
+}
+
+.prenotazioni-table th {
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #0b76b7;
+}
+
+.prenotazioni-table tr {
+  height: 3rem;
+}
+
+.prenotazioni-table tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.prenotazioni-table tr:nth-child(even) {
+  background-color: #f1f6fe;
 }

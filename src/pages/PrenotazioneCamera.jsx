@@ -24,8 +24,6 @@ function PrenotazioneCamera() {
   const [chevronPastiSoggiornoIsOpen, setChevronPastiSoggiornoIsOpen] =
     useState(false);
 
-  const notify = () => toast.success("Prenotazione effettuata con successo!");
-
   function getTodayDate() {
     const today = new Date();
     return today.toISOString().split("T")[0];
@@ -94,18 +92,30 @@ function PrenotazioneCamera() {
 
   const handleChevronInformazioniCameraClick = () => {
     setChevronInformazioniCameraIsOpen(!chevronInformazioniCameraIsOpen);
+    setChevronPeriodoSoggiornoIsOpen(false);
+    setChevronOspitiCameraIsOpen(false);
+    setChevronPastiSoggiornoIsOpen(false);
   };
 
   const handleChevronPeriodoSoggiornoClick = () => {
     setChevronPeriodoSoggiornoIsOpen(!chevronPeriodoSoggiornoIsOpen);
+    setChevronInformazioniCameraIsOpen(false);
+    setChevronOspitiCameraIsOpen(false);
+    setChevronPastiSoggiornoIsOpen(false);
   };
 
   const handleChevronOspitiCameraClick = () => {
     setChevronOspitiCameraIsOpen(!chevronOspitiCameraIsOpen);
+    setChevronInformazioniCameraIsOpen(false);
+    setChevronPeriodoSoggiornoIsOpen(false);
+    setChevronPastiSoggiornoIsOpen(false);
   };
 
   const handleChevronPastiSoggiornoClick = () => {
     setChevronPastiSoggiornoIsOpen(!chevronPastiSoggiornoIsOpen);
+    setChevronInformazioniCameraIsOpen(false);
+    setChevronPeriodoSoggiornoIsOpen(false);
+    setChevronOspitiCameraIsOpen(false);
   };
 
   const handleDateCheckInInput = () => {
@@ -251,7 +261,7 @@ function PrenotazioneCamera() {
       {cameraData && cameraData.camera && (
         <form
           onSubmit={handleSubmit}
-          className="h-full w-1/2 flex flex-col gap-2 justify-start items-start overflow-y-scroll overflow-x-hidden px-5 py-3"
+          className="h-full w-1/2 flex flex-col gap-2 justify-start items-start overscroll-y-auto px-5 py-3"
         >
           <h1 className="w-[95%] py-1 font-bold text-[#0B76B7] text-2xl border-b-[1.5px] border-[#01060E] ">
             Prenotazione Camera
@@ -301,7 +311,7 @@ function PrenotazioneCamera() {
               </p>
               <p className=" font-bold">
                 <span className="text-[#808080] font-normal">Prezzo:</span>{" "}
-                {cameraData.camera.prezzo}€
+                {cameraData.camera.prezzo}€/N
               </p>
               <p className=" font-bold">
                 <span className="text-[#808080] font-normal">Descrizione:</span>{" "}
