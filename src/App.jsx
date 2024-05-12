@@ -3,7 +3,8 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
-import Account from "./pages/Account";
+import AccountCliente from "./pages/AccountCliente";
+import AccountAdmin from "./pages/AccountAdmin";
 import Camere from "./pages/Camere";
 import Prenotazioni from "./pages/Prenotazioni";
 import PrenotazioneCamera from "./pages/PrenotazioneCamera";
@@ -25,7 +26,8 @@ function App() {
             <Route exact path="/home" element={<Home />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/registration" element={<Registration />} />
-            <Route exact path="/account" element={<Account />} />
+            <Route exact path="/account-cliente" element={<AccountCliente />} />
+            <Route exact path="/account-admin" element={<AccountAdmin />} />
             <Route exact path="/camere" element={<Camere />} />
             <Route exact path="/not-logged" element={<NotLogged />} />
             <Route

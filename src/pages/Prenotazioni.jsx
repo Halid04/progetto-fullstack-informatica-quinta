@@ -31,7 +31,7 @@ function Prenotazioni() {
         const updatedData = data.map((prenotazione) => {
           const dataInizio = new Date(prenotazione.dataInizioSoggiorno);
           const dataFine = new Date(prenotazione.dataFineSoggiorno);
-          dataFine.setDate(dataFine.getDate() + 1);
+          // dataFine.setDate(dataFine.getDate() + 1);
           let newStato;
           if (currentDate < dataInizio) {
             newStato = 0; // La prenotazione non è ancora iniziata

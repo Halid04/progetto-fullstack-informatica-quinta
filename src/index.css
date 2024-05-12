@@ -15,7 +15,8 @@ body {
 #dataCheckInInput::-webkit-calendar-picker-indicator,
 #dataCheckOutInput::-webkit-calendar-picker-indicator,
 .ospite-data-nascita::-webkit-calendar-picker-indicator,
-.pasto-giorno::-webkit-calendar-picker-indicator {
+.pasto-giorno::-webkit-calendar-picker-indicator,
+#dataDiNascitaUtenteInput::-webkit-calendar-picker-indicator {
   display: none;
 }
 

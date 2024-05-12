@@ -4,6 +4,9 @@ import { ChevronDown } from "lucide-react";
 
 function NavLinks() {
   const [isLogged, setIsLogged] = useState(localStorage.getItem("isLogged"));
+  const [utenteIsAdmin, setUtenteIsAdmin] = useState(
+    localStorage.getItem("isAdmin")
+  );
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -33,7 +36,12 @@ function NavLinks() {
   };
 
   const handleNavigateToAccount = () => {
-    navigate("/account");
+    if (utenteIsAdmin) {
+      navigate("/account-admin");
+    } else {
+      navigate("/account-cliente");
+    }
+
     setIsDropdownOpen(false);
   };
 

@@ -58,7 +58,11 @@ function Login() {
             localStorage.setItem("isLogged", data.login);
 
             setTimeout(() => {
-              navigate("/account");
+              if (data.admin) {
+                navigate("/account-admin");
+              } else {
+                navigate("/account-cliente");
+              }
               window.location.reload();
             }, 500);
           }

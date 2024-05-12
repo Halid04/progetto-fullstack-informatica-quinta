@@ -63,10 +63,7 @@ function PrenotazioneCamera() {
         setCameraData(data);
       })
       .catch((error) =>
-        console.error(
-          "Errore durante il recupero dell'immagine della camera:",
-          error
-        )
+        console.error("Errore durante il recupero deli dati", error)
       );
   };
 
