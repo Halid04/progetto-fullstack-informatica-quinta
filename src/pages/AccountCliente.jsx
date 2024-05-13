@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 import {
   Pencil,
   Contact,
@@ -8,7 +9,6 @@ import {
   Phone,
   EyeOff,
 } from "lucide-react";
-import PrenotazioneCamera from "./PrenotazioneCamera";
 
 function AccountCliente() {
   const [utenteID, setUtenteID] = useState(localStorage.getItem("userId"));
@@ -46,6 +46,65 @@ function AccountCliente() {
     setHiddePassword(!hiddePassword);
   };
 
+  const salvaModifiche = (event) => {
+    event.preventDefault();
+    // Recupera i nuovi valori dei campi
+    const nome = document.getElementById("nomeUtenteInput").value;
+    const cognome = document.getElementById("cognomeUtenteInput").value;
+    const dataDiNascita = document.getElementById(
+      "dataDiNascitaUtenteInput"
+    ).value;
+    const telefono = document.getElementById("telefonoUtenteInput").value;
+    const password = document.getElementById("passwordUtenteInput").value;
+
+    // Crea il corpo della richiesta POST
+    const formData = {
+      utenteID: utenteID,
+      nome: nome,
+      cognome: cognome,
+      dataDiNascita: dataDiNascita,
+      telefono: telefono,
+      password: password,
+    };
+
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+
+    console.log(formData);
+    toast.loading("Prenotazione in corso...", { duration: 2000 });
+
+    setTimeout(() => {
+      fetch(
+        `http://localhost/progetto-fullstack-informatica-quinta/accountCliente.php?utenteID=${utenteID}`,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(formData),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
+            toast.success("Dati aggiornati con successo");
+          } else {
+            toast.error(
+              "Errore durante l'aggiornamento dei dati, controlla i campi e riprova."
+            );
+          }
+          console.log("Dati aggiornati con successo:", data);
+          setIsEditing(false);
+          setUtenteClienteData(data);
+        })
+        .catch((error) =>
+          console.error("Errore durante l'aggiornamento dei dati:", error)
+        );
+    }, 2000);
+  };
+
   return (
     <div className="h-full w-full py-8 flex flex-col justify-start items-start">
       <div className="h-[3rem] px-5 w-full flex gap-3 justify-start items-baseline">
@@ -55,8 +114,11 @@ function AccountCliente() {
         </span>
       </div>
       {utenteClienteData && (
-        <form className="w-full flex flex-col justify-start items-start px-5 gap-5">
-          <div className="w-full flex justify-start items-center gap-7">
+        <form
+          onSubmit={salvaModifiche}
+          className="w-full flex flex-col justify-start items-start px-5 gap-5"
+        >
+          <div className="w-full flex justify-start items-center flex-wrap gap-7">
             <div className="flex flex-col justify-center items-start">
               <label
                 className="text-[#808080] text-md"
@@ -104,7 +166,7 @@ function AccountCliente() {
             <div className="flex flex-col justify-center items-start">
               <label
                 className="text-[#808080] text-md"
-                htmlFor="cognomeUtenteInput"
+                htmlFor="dataDiNascitaUtenteInput"
               >
                 Data di nascita
               </label>
@@ -129,7 +191,7 @@ function AccountCliente() {
             <div className="flex flex-col justify-center items-start">
               <label
                 className="text-[#808080] text-md"
-                htmlFor="cognomeUtenteInput"
+                htmlFor="telefonoUtenteInput"
               >
                 Telefono
               </label>
@@ -155,7 +217,7 @@ function AccountCliente() {
             <div className="flex flex-col justify-center items-start">
               <label
                 className="text-[#808080] text-md"
-                htmlFor="cognomeUtenteInput"
+                htmlFor="passwordUtenteInput"
               >
                 Password
               </label>
@@ -177,6 +239,7 @@ function AccountCliente() {
                 )}
               </div>
             </div>
+            <Toaster position="top-center" reverseOrder={false} />
           </div>
           {isEditing && (
             <div className="w-full flex justify-start items-center gap-5">
@@ -212,6 +275,99 @@ function AccountCliente() {
           </span>
         </p>
       </div>
+      <div className="h-[2rem] px-5 mt-10 w-full flex gap-3 justify-start items-baseline">
+        <h1 className="text-[#0B76B7] text-2xl font-bold">
+          Dati ospiti salvati in prenotazioni{" "}
+        </h1>
+      </div>
+      {utenteClienteData &&
+        utenteClienteData.ospiti &&
+        utenteClienteData.ospiti.length > 0 &&
+        utenteClienteData.ospiti.map((ospite, index) => {
+          return (
+            <div
+              key={index}
+              className="w-full flex flex-col justify-start items-start px-5 gap-5"
+            >
+              <div className="w-full flex justify-start items-center gap-7 mt-5 flex-wrap">
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="nomeUtenteInput"
+                  >
+                    Nome
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="text"
+                      required
+                      id="nomeOspiteInput"
+                      name="nomeOspiteInput"
+                      className="bg-transparent outline-none border-none w-[9rem]"
+                      placeholder="Nome"
+                      defaultValue={ospite.nomeOspite}
+                      readOnly
+                    />
+                    <Contact color="#0B76B7" className="cursor-pointer" />
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="cognomeUtenteInput"
+                  >
+                    Cognome
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="text"
+                      required
+                      id="cognomeOspiteInput"
+                      name="cognomeOspiteInput"
+                      className="bg-transparent outline-none border-none w-[9rem]"
+                      placeholder="Cognome"
+                      defaultValue={ospite.cognomeOspite}
+                      readOnly
+                    />
+                    <Contact color="#0B76B7" className="cursor-pointer" />
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="dataDiNascitaOspiteInput"
+                  >
+                    Data di nascita
+                  </label>
+                  <div className="flex w-[11rem] justify-between items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="date"
+                      required
+                      id="dataDiNascitaOspiteInput"
+                      name="dataDiNascitaOspiteInput"
+                      className=" bg-transparent border-none outline-none"
+                      defaultValue={ospite.dataNascitaOspite}
+                      readOnly
+                    ></input>
+                    <CalendarDays color="#0B76B7" className="cursor-pointer" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      {utenteClienteData &&
+        utenteClienteData.ospiti &&
+        utenteClienteData.ospiti.length === 0 && (
+          <div className="px-5 w-full flex gap-3 justify-start items-baseline">
+            <p>
+              Non ci sono ospiti salvati in prenotazioni. Per aggiungere un
+              ospite.
+            </p>
+          </div>
+        )}
     </div>
   );
 }
