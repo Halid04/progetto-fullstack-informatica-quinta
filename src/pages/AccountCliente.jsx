@@ -90,14 +90,13 @@ function AccountCliente() {
         .then((data) => {
           if (data.success) {
             toast.success("Dati aggiornati con successo");
-          } else {
-            toast.error(
-              "Errore durante l'aggiornamento dei dati, controlla i campi e riprova."
-            );
+            getUtenteClienteData();
+          } else if (data.error) {
+            toast.error(data.error);
+            console.log("Errore durante l'aggiornamento dei dati:", data.error);
           }
           console.log("Dati aggiornati con successo:", data);
           setIsEditing(false);
-          setUtenteClienteData(data);
         })
         .catch((error) =>
           console.error("Errore durante l'aggiornamento dei dati:", error)
@@ -362,10 +361,7 @@ function AccountCliente() {
         utenteClienteData.ospiti &&
         utenteClienteData.ospiti.length === 0 && (
           <div className="px-5 w-full flex gap-3 justify-start items-baseline">
-            <p>
-              Non ci sono ospiti salvati in prenotazioni. Per aggiungere un
-              ospite.
-            </p>
+            <p>Non ci sono ospiti salvati in prenotazioni.</p>
           </div>
         )}
     </div>
