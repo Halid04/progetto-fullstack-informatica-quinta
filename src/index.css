@@ -16,7 +16,8 @@ body {
 #dataCheckOutInput::-webkit-calendar-picker-indicator,
 .ospite-data-nascita::-webkit-calendar-picker-indicator,
 .pasto-giorno::-webkit-calendar-picker-indicator,
-#dataDiNascitaUtenteInput::-webkit-calendar-picker-indicator {
+#dataDiNascitaUtenteInput::-webkit-calendar-picker-indicator,
+.utenti-date::-webkit-calendar-picker-indicator {
   display: none;
 }
 
@@ -92,7 +93,26 @@ immagineCameraInPrenotazione {
   background-color: #ffffff;
 }
 
+.prenotazioni-table tr:nth-child(odd):hover,
+.camere-admin-table tr:nth-child(odd):hover {
+  background-color: #ededed;
+}
+
 .prenotazioni-table tr:nth-child(even),
 .camere-admin-table tr:nth-child(even) {
   background-color: #f1f6fe;
+}
+
+.prenotazioni-table tr:nth-child(even):hover,
+.camere-admin-table tr:nth-child(even):hover {
+  background-color: #e9edf3;
+}
+
+.account-admin {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.account-admin::-webkit-scrollbar {
+  display: none;
 }

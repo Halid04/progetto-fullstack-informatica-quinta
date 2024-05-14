@@ -20,7 +20,6 @@ function AccountAdmin() {
   const [leMieCamereIsActive, setLeMieCamereIsActive] = useState(true);
   const [iMieiUtentiIsActive, setIMieiUtentiIsActive] = useState(false);
   const [dashboardIsActive, setDashboardIsActive] = useState(false);
-  const [editingCameraRows, setEditingCameraRows] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,9 +34,6 @@ function AccountAdmin() {
       .then((data) => {
         console.log(data);
         setUtenteClienteData(data);
-        const initialEditingStates =
-          data && data.camere && data.camere.map(() => false);
-        setEditingCameraRows(initialEditingStates);
       })
       .catch((error) =>
         console.error("Errore durante il recupero deli dati", error)
@@ -52,13 +48,6 @@ function AccountAdmin() {
   //     utenteClienteData.camere.map(() => false);
   //   setEditingCameraRows(initialEditingStates);
   // }, [utenteClienteData.camere]);
-
-  // Aggiorna questa funzione per gestire l'attivazione/disattivazione della modalità di modifica per una riga specifica
-  const toggleEditingCameraRow = (index) => {
-    const newEditingStates = [...editingCameraRows];
-    newEditingStates[index] = !newEditingStates[index];
-    setEditingCameraRows(newEditingStates);
-  };
 
   const handleLeMieCamereIsActive = () => {
     setLeMieCamereIsActive(true);
@@ -162,8 +151,56 @@ function AccountAdmin() {
         );
     }, 2000);
   };
+
+  const deleteUtente = (index) => {
+    const utenteRowID = index;
+
+    // Crea il corpo della richiesta POST
+    const formData = {
+      utenteID: utenteRowID,
+    };
+
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+
+    console.log(formData);
+    toast.loading("Prenotazione in corso...", { duration: 2000 });
+
+    setTimeout(() => {
+      fetch(
+        `http://localhost/progetto-fullstack-informatica-quinta/accountAdmin.php?utenteID=${utenteRowID}&action=eliminaUtente`,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(formData),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
+            toast.success("Utente eliminato con successo");
+            getUtenteClienteData();
+          } else if (data.error) {
+            toast.error(data.error);
+            console.log(
+              "Errore durante l'eliminazione dell'utente:",
+              data.error
+            );
+          }
+          console.log("Utente eliminato con successo", data);
+        })
+        .catch((error) =>
+          console.error("Errore durante l'eliminazione dell'utente:", error)
+        );
+    }, 2000);
+  };
+
   return (
-    <div className="h-full w-full py-8 flex flex-col justify-start items-start">
+    <div className="account-admin h-full w-full py-8 flex flex-col justify-start items-start overflow-x-hidden">
       <div className="h-[3rem] px-5 w-full flex gap-3 justify-start items-baseline">
         <h1 className="text-[#0B76B7] text-2xl font-bold">Dati personali</h1>
         <span title="Modifica i dati" onClick={() => setIsEditing(true)}>
@@ -387,7 +424,6 @@ function AccountAdmin() {
                       utenteClienteData.camere.map((camera, index) => {
                         return (
                           <tr key={index}>
-                            {/* <form action=""> */}
                             <td>
                               <input
                                 type="text"
@@ -395,7 +431,7 @@ function AccountAdmin() {
                                 name={camera.nomeCamera}
                                 id={camera.nomeCamera}
                                 defaultValue={camera.nomeCamera}
-                                readOnly={!editingCameraRows[index]}
+                                readOnly
                               />
                             </td>
                             <td>
@@ -405,7 +441,7 @@ function AccountAdmin() {
                                 name={camera.tipoCamera}
                                 id={camera.tipoCamera}
                                 defaultValue={camera.tipoCamera}
-                                readOnly={!editingCameraRows[index]}
+                                readOnly
                               />
                             </td>
                             <td>
@@ -416,7 +452,7 @@ function AccountAdmin() {
                                 name={camera.postiLetto}
                                 id={camera.postiLetto}
                                 defaultValue={camera.postiLetto}
-                                readOnly={!editingCameraRows[index]}
+                                readOnly
                               />
                             </td>
                             <td>
@@ -429,7 +465,7 @@ function AccountAdmin() {
                                 name={camera.prezzo}
                                 id={camera.prezzo}
                                 defaultValue={camera.prezzo}
-                                readOnly={!editingCameraRows[index]}
+                                readOnly
                               />
                             </td>
                             <td>
@@ -456,7 +492,7 @@ function AccountAdmin() {
                                       "..."
                                     : camera.descrizioneCamera
                                 }
-                                readOnly={!editingCameraRows[index]}
+                                readOnly
                               />
                             </td>
                             <td>
@@ -469,32 +505,6 @@ function AccountAdmin() {
                                 readOnly
                               />
                             </td>
-                            <td className="flex justify-start items-center mr-10 gap-2">
-                              {!editingCameraRows[index] ? (
-                                <Pencil
-                                  color="#0B76B7"
-                                  className="cursor-pointer"
-                                  height={"1.3rem"}
-                                  onClick={() => toggleEditingCameraRow(index)}
-                                />
-                              ) : (
-                                <Check
-                                  color="#0B76B7"
-                                  className="cursor-pointer"
-                                  height={"1.3rem"}
-                                  onClick={() => toggleEditingCameraRow(index)}
-                                />
-                              )}
-
-                              {!editingCameraRows[index] && (
-                                <Trash2
-                                  color="#0B76B7"
-                                  className="cursor-pointer"
-                                  height={"1.3rem"}
-                                />
-                              )}
-                            </td>
-                            {/* </form> */}
                           </tr>
                         );
                       })}
@@ -503,8 +513,105 @@ function AccountAdmin() {
               </div>
             </div>
           </div>
-          <div className="bg-green-500 w-[100vw]" id="iMieiUtentiElement">
-            i miei utenti
+          <div className="w-[100vw]" id="iMieiUtentiElement">
+            <div className="w-full flex justify-start items-center">
+              <div className="w-full px-2 py-3 flex justify-start items-center shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] border-[1.5px] border-[#EEEEEE]">
+                <table className="camere-admin-table w-full border-collapse ">
+                  <tbody>
+                    <tr>
+                      <th>Nome</th>
+                      <th>Cognome</th>
+                      <th>ID Utente</th>
+                      <th>Ruolo</th>
+                      <th>Data di nascita</th>
+                      <th>Telefono</th>
+                      <th>Password</th>
+                    </tr>
+
+                    {utenteClienteData &&
+                      utenteClienteData.utenti &&
+                      utenteClienteData.utenti.length > 0 &&
+                      utenteClienteData.utenti.map((utente, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>
+                              <input
+                                type="text"
+                                className="border-none outline-none bg-transparent"
+                                name={utente.nomeUtente}
+                                id={utente.nomeUtente}
+                                defaultValue={utente.nomeUtente}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                className="border-none outline-none bg-transparent"
+                                name={utente.cognomeUtente}
+                                id={utente.cognomeUtente}
+                                defaultValue={utente.cognomeUtente}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                step={1}
+                                className="border-none outline-none bg-transparent"
+                                name={utente.IDUtente}
+                                id={utente.IDUtente}
+                                defaultValue={utente.IDUtente}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                className="border-none outline-none bg-transparent"
+                                name={utente.ruoloUtente}
+                                id={utente.ruoloUtente}
+                                defaultValue={utente.ruoloUtente}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="date"
+                                className="utenti-date border-none outline-none bg-transparent"
+                                name={utente.dataNascitaUtente}
+                                id={utente.dataNascitaUtente}
+                                value={utente.dataNascitaUtente}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                className="border-none outline-none bg-transparent"
+                                name={utente.telefonoUtente}
+                                id={utente.telefonoUtente}
+                                defaultValue={utente.telefonoUtente}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="password"
+                                className="border-none outline-none bg-transparent"
+                                name={utente.passwordUtente}
+                                id={utente.passwordUtente}
+                                defaultValue={utente.passwordUtente}
+                                readOnly
+                              />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
           <div className="bg-blue-500 w-[100vw]" id="dashboardElement">
             dashboard

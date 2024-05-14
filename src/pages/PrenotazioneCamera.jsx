@@ -271,9 +271,11 @@ function PrenotazioneCamera() {
               <ChevronDown
                 color="#01060E"
                 onClick={handleChevronInformazioniCameraClick}
-                className={`rotate-${
-                  chevronInformazioniCameraIsOpen ? 180 : 0
-                } cursor-pointer transition-all`}
+                className={
+                  chevronInformazioniCameraIsOpen
+                    ? "rotate-180 cursor-pointer transition-all"
+                    : "rotate-0 cursor-pointer transition-all"
+                }
               />
             </div>
             <div
@@ -323,9 +325,11 @@ function PrenotazioneCamera() {
               <ChevronDown
                 color="#01060E"
                 onClick={handleChevronPeriodoSoggiornoClick}
-                className={`rotate-${
-                  chevronPeriodoSoggiornoIsOpen ? 180 : 0
-                } cursor-pointer transition-all`}
+                className={
+                  chevronPeriodoSoggiornoIsOpen
+                    ? "rotate-180 cursor-pointer transition-all"
+                    : "rotate-0 cursor-pointer transition-all"
+                }
               />
             </div>
             <div
@@ -397,9 +401,11 @@ function PrenotazioneCamera() {
               <ChevronDown
                 color="#01060E"
                 onClick={handleChevronOspitiCameraClick}
-                className={`rotate-${
-                  chevronOspitiCameraIsOpen ? 180 : 0
-                } cursor-pointer transition-all`}
+                className={
+                  chevronOspitiCameraIsOpen
+                    ? "rotate-180 cursor-pointer transition-all"
+                    : "rotate-0 cursor-pointer transition-all"
+                }
               />
             </div>
             <div
@@ -484,9 +490,11 @@ function PrenotazioneCamera() {
               <ChevronDown
                 color="#01060E"
                 onClick={handleChevronPastiSoggiornoClick}
-                className={`rotate-${
-                  chevronPastiSoggiornoIsOpen ? 180 : 0
-                } cursor-pointer transition-all`}
+                className={
+                  chevronPastiSoggiornoIsOpen
+                    ? "rotate-180 cursor-pointer transition-all"
+                    : "rotate-0 cursor-pointer transition-all"
+                }
               />
             </div>
             <div
