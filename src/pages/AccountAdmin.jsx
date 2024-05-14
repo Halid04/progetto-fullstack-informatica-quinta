@@ -10,6 +10,11 @@ import {
   EyeOff,
   Trash2,
   Check,
+  UsersRound,
+  BedDouble,
+  CalendarCheck2,
+  File,
+  Plus,
 } from "lucide-react";
 
 function AccountAdmin() {
@@ -20,6 +25,7 @@ function AccountAdmin() {
   const [leMieCamereIsActive, setLeMieCamereIsActive] = useState(true);
   const [iMieiUtentiIsActive, setIMieiUtentiIsActive] = useState(false);
   const [dashboardIsActive, setDashboardIsActive] = useState(false);
+  const [aggiungiCameraIsActive, setAggiungiCameraIsActive] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,6 +59,7 @@ function AccountAdmin() {
     setLeMieCamereIsActive(true);
     setIMieiUtentiIsActive(false);
     setDashboardIsActive(false);
+    setAggiungiCameraIsActive(false);
 
     const leMieCamereElement = document.getElementById("container");
     leMieCamereElement.style.transform = "translateX(0vw)";
@@ -62,19 +69,31 @@ function AccountAdmin() {
     setLeMieCamereIsActive(false);
     setIMieiUtentiIsActive(true);
     setDashboardIsActive(false);
+    setAggiungiCameraIsActive(false);
 
     // e.preventDefault();
     const iMieiUtentiElement = document.getElementById("container");
     iMieiUtentiElement.style.transform = "translateX(-100vw)";
   };
 
+  const handleAggiungiCameraIsActive = () => {
+    setLeMieCamereIsActive(false);
+    setIMieiUtentiIsActive(false);
+    setDashboardIsActive(false);
+    setAggiungiCameraIsActive(true);
+
+    const dashboardElement = document.getElementById("container");
+    dashboardElement.style.transform = "translateX(-200vw)";
+  };
+
   const handleDashboardIsActive = () => {
     setLeMieCamereIsActive(false);
     setIMieiUtentiIsActive(false);
     setDashboardIsActive(true);
+    setAggiungiCameraIsActive(false);
 
     const dashboardElement = document.getElementById("container");
-    dashboardElement.style.transform = "translateX(-200vw)";
+    dashboardElement.style.transform = "translateX(-300vw)";
   };
 
   // const handleHorizontalElementScroll = (e) => {
@@ -121,7 +140,7 @@ function AccountAdmin() {
     };
 
     console.log(formData);
-    toast.loading("Prenotazione in corso...", { duration: 2000 });
+    toast.loading("Aggiornamento dei dati in corso...", { duration: 2000 });
 
     setTimeout(() => {
       fetch(
@@ -360,7 +379,7 @@ function AccountAdmin() {
       </div>
       <div className=" px-5 w-full flex gap-3 justify-start items-baseline">
         <p>
-          Per vedere tutte le informazioni sulle tue prenotazioni{" "}
+          Per vedere tutte le informazioni sulle prenotazioni{" "}
           <span
             onClick={() => navigate("/prenotazioni")}
             className="font-bold text-[#0B76B7] cursor-pointer"
@@ -391,6 +410,15 @@ function AccountAdmin() {
           </button>
           <button
             type="button"
+            onClick={handleAggiungiCameraIsActive}
+            className={`text-[${
+              !aggiungiCameraIsActive ? "#808080" : "#0B76B7"
+            }] bg-trasparent border-none outline-none font-bold cursor-pointer`}
+          >
+            Aggiungi camera
+          </button>
+          <button
+            type="button"
             onClick={handleDashboardIsActive}
             className={`text-[${
               !dashboardIsActive ? "#808080" : "#0B76B7"
@@ -405,7 +433,7 @@ function AccountAdmin() {
         >
           <div className="w-[100vw]" id="leMieCamereElement">
             <div className="w-full flex justify-start items-center">
-              <div className="w-full px-2 py-3 flex justify-start items-center shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] border-[1.5px] border-[#EEEEEE]">
+              <div className="w-full px-5 py-3 flex justify-start items-center shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] border-[1.5px] border-[#EEEEEE]">
                 <table className="camere-admin-table w-full border-collapse ">
                   <tbody>
                     <tr>
@@ -515,7 +543,7 @@ function AccountAdmin() {
           </div>
           <div className="w-[100vw]" id="iMieiUtentiElement">
             <div className="w-full flex justify-start items-center">
-              <div className="w-full px-2 py-3 flex justify-start items-center shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] border-[1.5px] border-[#EEEEEE]">
+              <div className="w-full px-5 py-3 flex justify-start items-center shadow-[0px_2px_8px_0px_rgba(99,99,99,0.2)] border-[1.5px] border-[#EEEEEE]">
                 <table className="camere-admin-table w-full border-collapse ">
                   <tbody>
                     <tr>
@@ -613,8 +641,249 @@ function AccountAdmin() {
               </div>
             </div>
           </div>
-          <div className="bg-blue-500 w-[100vw]" id="dashboardElement">
-            dashboard
+          <div className="w-[100vw]" id="aggiungiCameraElement">
+            <form className="w-full flex flex-col justify-start items-start px-5 py-5 gap-5">
+              <button
+                type="button"
+                className="flex justify-center items-center border-none outline-none hover:scale-[.95] transition-transform duration-300 ease-in-out"
+              >
+                <Plus color="#7E8794" />
+                <span className=" text-[#7E8794]">
+                  Aggiungi immagine camera
+                </span>
+              </button>
+              <div className="w-full flex justify-start items-center flex-wrap gap-7">
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="nomeCameraInput"
+                  >
+                    Nome camera
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="text"
+                      required
+                      id="nomeCameraInput"
+                      name="nomeCameraInput"
+                      className="bg-transparent outline-none border-none w-[9rem]"
+                      placeholder="Nome camera"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="tipoCamera"
+                  >
+                    Tipo camera
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <select
+                      name="tipoCamera"
+                      id="tipoCamera"
+                      className="bg-transparent outline-none border-none w-[9rem]"
+                    >
+                      <option value="singola">Singola</option>
+                      <option value="doppia">Doppia</option>
+                      <option value="suite">Suite</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="postiLettoInput"
+                  >
+                    Posti letto
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="number"
+                      required
+                      id="postiLettoInput"
+                      name="postiLettoInput"
+                      className="bg-transparent outline-none border-none w-[9rem]"
+                      placeholder="Posti letto"
+                      min={1}
+                      max={6}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="prezzoInput"
+                  >
+                    Prezzo
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="number"
+                      step={0.01}
+                      required
+                      id="prezzoInput"
+                      name="prezzoInput"
+                      className="bg-transparent outline-none border-none w-[9rem]"
+                      placeholder="Prezzo"
+                      min={20}
+                      max={500}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="descrizioneCameraInput"
+                  >
+                    Descrizione
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="text"
+                      required
+                      id="descrizioneCameraInput"
+                      name="descrizioneCameraInput"
+                      className="bg-transparent outline-none border-none w-[30rem]"
+                      placeholder="Descrizione"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col justify-center items-start">
+                  <label
+                    className="text-[#808080] text-md"
+                    htmlFor="immagineCameraInput"
+                  >
+                    Immagine camera
+                  </label>
+                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                    <input
+                      type="file"
+                      accept="image/jpg"
+                      required
+                      id="immagineCameraInput"
+                      name="immagineCameraInput"
+                      className="bg-transparent outline-none border-none w-[12rem]"
+                      placeholder="Immagine camera"
+                    />
+                    <label for="immagineCameraInput" className="cursor-pointer">
+                      <File color="#0B76B7" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="bg-[#0B76B7] border-[1.5px] px-5 py-2 rounded-md text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out "
+              >
+                Aggiungi camera
+              </button>
+            </form>
+          </div>
+          <div className="w-[100vw]" id="dashboardElement">
+            <div className="w-full px-5 py-10 flex flex-col justify-start items-start gap-y-3">
+              <div className="w-full flex justify-between items-center flex-wrap">
+                <div className="card-dashboard py-2 flex flex-col justify-center items-center w-[18rem] h-[10rem] rounded-2xl bg-[#F1F6FE] hover:scale-[1.03] transition-transform">
+                  <div className="w-full text-xl text-[#0B76B7] h-[15%] flex justify-center items-center">
+                    <h2>Utenti</h2>
+                  </div>
+                  <div className="w-full h-[75%] flex justify-evenly items-center">
+                    <UsersRound
+                      strokeWidth={1}
+                      color="#0B76B7"
+                      className="w-1/2 h-[5rem]"
+                    />
+                    {utenteClienteData &&
+                    utenteClienteData.dashboard &&
+                    utenteClienteData.dashboard.numUtenti ? (
+                      <h1 className="w-1/2 font-bold text-[#0B76B7] text-[5rem]">
+                        {utenteClienteData.dashboard.numUtenti < 10
+                          ? `0${utenteClienteData.dashboard.numUtenti}`
+                          : utenteClienteData.dashboard.numUtenti}
+                      </h1>
+                    ) : (
+                      <h1 className="w-1/2 font-bold text-[#0B76B7] text-[5rem]">
+                        00
+                      </h1>
+                    )}
+                  </div>
+                </div>
+                <div className="card-dashboard py-2 flex flex-col justify-center items-center w-[18rem] h-[10rem] rounded-2xl bg-[#F1F6FE] hover:scale-[1.03] transition-transform">
+                  <div className="w-full text-xl text-[#0B76B7] h-[15%] flex justify-center items-center">
+                    <h2>Camere</h2>
+                  </div>
+                  <div className="w-full h-[75%] flex justify-evenly items-center">
+                    <BedDouble
+                      strokeWidth={1}
+                      color="#0B76B7"
+                      className="w-1/2 h-[5rem]"
+                    />
+                    {utenteClienteData &&
+                    utenteClienteData.dashboard &&
+                    utenteClienteData.dashboard.numCamere ? (
+                      <h1 className="w-1/2 font-bold text-[#0B76B7] text-[5rem]">
+                        {utenteClienteData.dashboard.numCamere < 10
+                          ? `0${utenteClienteData.dashboard.numCamere}`
+                          : utenteClienteData.dashboard.numCamere}
+                      </h1>
+                    ) : (
+                      <h1 className="w-1/2 font-bold text-[#0B76B7] text-[5rem]">
+                        00
+                      </h1>
+                    )}
+                  </div>
+                </div>
+                <div className="card-dashboard py-2 flex flex-col justify-center items-center w-[18rem] h-[10rem] rounded-2xl bg-[#F1F6FE] hover:scale-[1.03] transition-transform">
+                  <div className="w-full text-xl text-[#0B76B7] h-[15%] flex justify-center items-center">
+                    <h2>Prenotazioni</h2>
+                  </div>
+                  <div className="w-full h-[75%] flex justify-evenly items-center">
+                    <CalendarCheck2
+                      strokeWidth={1}
+                      color="#0B76B7"
+                      className="w-1/2 h-[5rem]"
+                    />
+                    {utenteClienteData &&
+                    utenteClienteData.dashboard &&
+                    utenteClienteData.dashboard.numPrenotazioni ? (
+                      <h1 className="w-1/2 font-bold text-[#0B76B7] text-[5rem]">
+                        {utenteClienteData.dashboard.numPrenotazioni < 10
+                          ? `0${utenteClienteData.dashboard.numPrenotazioni}`
+                          : `${utenteClienteData.dashboard.numPrenotazioni}`}
+                      </h1>
+                    ) : (
+                      <h1 className="w-1/2 font-bold text-[#0B76B7] text-[5rem]">
+                        00
+                      </h1>
+                    )}
+                  </div>
+                </div>
+                <div className="card-dashboard py-2 flex flex-col justify-center items-center w-[18rem] h-[10rem] rounded-2xl bg-[#F1F6FE] hover:scale-[1.03] transition-transform">
+                  <div className="w-full text-xl text-[#0B76B7] h-[15%] flex justify-center items-center">
+                    <h2>Incassi totali</h2>
+                  </div>
+                  <div className="w-full h-[75%] flex justify-center items-center">
+                    {utenteClienteData &&
+                    utenteClienteData.dashboard &&
+                    utenteClienteData.dashboard.incassiTotali ? (
+                      <h1 className="font-bold text-[#0B76B7] text-[5rem]">
+                        {Math.round(utenteClienteData.dashboard.incassiTotali)}€
+                      </h1>
+                    ) : (
+                      <h1 className="w-1/2 font-bold text-[#0B76B7] text-[5rem]">
+                        00
+                      </h1>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div>Grafico</div>
+            </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import homePageBgImage from "../assets/homePageBgImage.jpg";
 import wave from "../assets/wave.png";
 import { Contact, Eye, EyeOff, CalendarDays, Phone } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 function Registration() {
   const [hiddePassword, setHiddePassword] = useState(true);
@@ -27,7 +28,7 @@ function Registration() {
 
   const handleRegistrationSubmit = (e) => {
     e.preventDefault();
- 
+
     if (
       userName === "" ||
       userSurname === "" ||
@@ -42,13 +43,19 @@ function Registration() {
       const birthdate = new Date(userBirthdate);
       const age = currentDate.getFullYear() - birthdate.getFullYear();
       if (age < 16) {
-        alert("Devi avere almeno 16 anni per registrarti.");
+        // alert("Devi avere almeno 16 anni per registrarti.");
+        toast.error("Devi avere almeno 16 anni per registrarti.", {
+          duration: 1500,
+        });
         return; // Esce dalla funzione se l'età è inferiore a 16
       }
 
       // Effettua il controllo sulla lunghezza della password
       if (userPassword.length < 8) {
-        alert("La password deve contenere almeno 8 caratteri.");
+        // alert("La password deve contenere almeno 8 caratteri.");
+        toast.error("La password deve contenere almeno 8 caratteri.", {
+          duration: 1500,
+        });
         return; // Esce dalla funzione se la password è troppo corta
       }
 
@@ -80,7 +87,8 @@ function Registration() {
               setRegistrationDone(true); // Imposta lo stato registrationDone su true
             }, 500);
           } else {
-            alert(data.message);
+            // alert(data.message);
+            toast.error(data.message);
           }
           // Gestisci i dati restituiti dal server
           console.log(data); // Mostra i dati restituiti dal server nella console
@@ -112,6 +120,7 @@ function Registration() {
         }}
         className="h-full w-full absolute top-0 left-0"
       ></div>
+      <Toaster position="top-center" reverseOrder={false} />
 
       {!registrationDone ? (
         <form
