@@ -40,7 +40,10 @@ function Card({
   };
 
   return (
-    <div className=" z-40 border-[1px] border-[#7E8794] cursor-pointer flex flex-col justify-start items-center w-[15rem] rounded-md hover:scale-[.95] transition-transform duration-300 ease-in-out ">
+    <div
+      onClick={() => handleNavigateToPrenotazioneCamera(numeroCamera)}
+      className=" z-40 border-[1px] border-[#7E8794] cursor-pointer flex flex-col justify-start items-center w-[15rem] rounded-md hover:scale-[.95] transition-transform duration-300 ease-in-out "
+    >
       <img
         src={`src/progettoInfoImage/${imgNewPath.trim()}/${nomeImmagineCamera.trim()}.jpg`}
         className="rounded-t-md w-full h-[10rem] object-cover"

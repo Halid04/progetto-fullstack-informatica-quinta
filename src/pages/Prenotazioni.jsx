@@ -286,19 +286,19 @@ function Prenotazioni() {
                         {prenotazione.newStato == 0 && (
                           <div
                             title="Non iniziata"
-                            className=" w-2 h-2 rounded-full bg-gray-500 ml-3"
+                            className="animate-pulse w-2 h-2 rounded-full bg-gray-500 ml-3"
                           ></div>
                         )}
                         {prenotazione.newStato == 1 && (
                           <div
                             title="In corso"
-                            className=" w-2 h-2 rounded-full bg-[#43D011] ml-3"
+                            className="animate-pulse w-2 h-2 rounded-full bg-[#43D011] ml-3"
                           ></div>
                         )}
                         {prenotazione.newStato == 2 && (
                           <div
                             title="Terminata"
-                            className=" w-2 h-2 rounded-full bg-[#D11717] ml-3"
+                            className="animate-pulse w-2 h-2 rounded-full bg-[#D11717] ml-3"
                           ></div>
                         )}
                       </td>

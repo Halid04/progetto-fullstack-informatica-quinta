@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { Chart as ChartJS } from "chart.js/auto";
+import { Line } from "react-chartjs-2";
 import {
   Pencil,
   Contact,
@@ -34,6 +36,8 @@ function AccountAdmin() {
     prezzo: 20.0,
     descrizione: "",
   });
+  const [incassiMensili, setIncassiMensili] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,10 +52,24 @@ function AccountAdmin() {
       .then((data) => {
         console.log(data);
         setUtenteClienteData(data);
+
+        if (data.incassiMensili) {
+          const incassi = data.incassiMensili.map((incasso) => ({
+            mese: incasso.mese,
+            incasso: incasso.incassoMensile,
+          }));
+          setIncassiMensili(incassi);
+        }
       })
       .catch((error) =>
-        console.error("Errore durante il recupero deli dati", error)
+        console.error("Errore durante il recupero dei dati", error)
       );
+  };
+
+  const formatDateToMonthName = (dateString) => {
+    const [year, month] = dateString.split("-");
+    const date = new Date(year, month - 1);
+    return date.toLocaleDateString("it-IT", { month: "long" });
   };
 
   const handleAggiungiImmagineCameraClick = () => {
@@ -849,7 +867,7 @@ function AccountAdmin() {
             </form>
           </div>
           <div className="w-[100vw]" id="dashboardElement">
-            <div className="w-full px-5 py-10 flex flex-col justify-start items-start gap-y-3">
+            <div className="w-full px-5 py-10 flex flex-col justify-start items-start gap-y-10">
               <div className="w-full flex justify-between items-center flex-wrap">
                 <div className="card-dashboard py-2 flex flex-col justify-center items-center w-[18rem] h-[10rem] rounded-2xl bg-[#F1F6FE] hover:scale-[1.03] transition-transform">
                   <div className="w-full text-xl text-[#0B76B7] h-[15%] flex justify-center items-center">
@@ -945,7 +963,22 @@ function AccountAdmin() {
                   </div>
                 </div>
               </div>
-              <div>Grafico</div>
+              <div className="w-full justify-center items-center bg-[#F1F6FE]">
+                <Line
+                  data={{
+                    labels: incassiMensili?.map((incasso) => {
+                      return formatDateToMonthName(incasso.mese);
+                    }),
+                    datasets: [
+                      {
+                        label: "Incassi mensili",
+                        data: incassiMensili?.map((incasso) => incasso.incasso),
+                        backgroundColor: ["#0B76B7"],
+                      },
+                    ],
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

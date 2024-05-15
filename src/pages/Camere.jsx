@@ -331,7 +331,9 @@ function Camere() {
               key={camera.numeroCamera}
               nomeCamera={camera.nomeCamera}
               tipoCamera={camera.tipoCamera}
-              postiLetto={`${camera.postiLetto} letto`}
+              postiLetto={`${camera.postiLetto} ${
+                camera.postiLetto > 1 ? "letti" : "letto"
+              } `}
               prezzo={`${camera.prezzo}€/N`}
               descrizione={camera.descrizione}
               nomeImmagineCamera={camera.nomeImmagineCamera}

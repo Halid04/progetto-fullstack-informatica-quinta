@@ -461,6 +461,7 @@ function PrenotazioneCamera() {
                       required
                       id={`ospiteDataNascitaInput_${ospite.id}`}
                       name={`ospiteDataNascitaInput_${ospite.id}`}
+                      max={getTodayDate()}
                       className="ospite-data-nascita bg-transparent border-none outline-none "
                     />
                     <CalendarDays
