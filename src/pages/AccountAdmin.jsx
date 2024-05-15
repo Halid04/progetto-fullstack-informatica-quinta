@@ -26,6 +26,14 @@ function AccountAdmin() {
   const [iMieiUtentiIsActive, setIMieiUtentiIsActive] = useState(false);
   const [dashboardIsActive, setDashboardIsActive] = useState(false);
   const [aggiungiCameraIsActive, setAggiungiCameraIsActive] = useState(false);
+  const [immagineCamera, setImmagineCamera] = useState([1]);
+  const [cameraData, setCameraData] = useState({
+    nomeCamera: "",
+    tipoCamera: "singola",
+    postiLetto: 1,
+    prezzo: 20.0,
+    descrizione: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +52,85 @@ function AccountAdmin() {
       .catch((error) =>
         console.error("Errore durante il recupero deli dati", error)
       );
+  };
+
+  const handleAggiungiImmagineCameraClick = () => {
+    const immagineCameraId = Date.now();
+    setImmagineCamera([...immagineCamera, { id: immagineCameraId }]);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCameraData({ ...cameraData, [name]: value });
+  };
+
+  const handleFileChange = (e, id) => {
+    const files = e.target.files;
+    const fileName = files[0].name;
+    const fileNameWithoutExtension = fileName.split(".").slice(0, -1).join(".");
+
+    setImmagineCamera(
+      immagineCamera.map((immagine) =>
+        immagine.id === id
+          ? { ...immagine, file: fileNameWithoutExtension }
+          : immagine
+      )
+    );
+  };
+
+  const resetForm = () => {
+    setCameraData({
+      nomeCamera: "",
+      tipoCamera: "singola",
+      postiLetto: 1,
+      prezzo: 20.0,
+      descrizione: "",
+    });
+    setImmagineCamera([]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Gestisci la logica di invio del form qui.
+    const formData = {
+      ...cameraData,
+      immagineCamera: immagineCamera.map((immagine) => immagine.file),
+    };
+
+    let headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+
+    console.log(formData);
+    toast.loading("Inserimento camera in corso...", { duration: 2000 });
+
+    setTimeout(() => {
+      fetch(
+        `http://localhost/progetto-fullstack-informatica-quinta/accountAdmin.php?action=AggiuntaCamera`,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify(formData),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
+            toast.success("Camera inserita con successo");
+            resetForm(); // Reimposta il form dopo l'inserimento
+            getUtenteClienteData();
+          } else {
+            toast.error("Errore durante l'inserimento della camera:");
+          }
+          console.log("Camera inserita con successo", data);
+        })
+        .catch((error) =>
+          console.error("Errore durante l'inserimento della camera:", error)
+        );
+    }, 2000);
   };
 
   // Aggiungi questa funzione per inizializzare gli stati per ciascuna riga
@@ -167,53 +254,6 @@ function AccountAdmin() {
         })
         .catch((error) =>
           console.error("Errore durante l'aggiornamento dei dati:", error)
-        );
-    }, 2000);
-  };
-
-  const deleteUtente = (index) => {
-    const utenteRowID = index;
-
-    // Crea il corpo della richiesta POST
-    const formData = {
-      utenteID: utenteRowID,
-    };
-
-    let headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
-
-    console.log(formData);
-    toast.loading("Prenotazione in corso...", { duration: 2000 });
-
-    setTimeout(() => {
-      fetch(
-        `http://localhost/progetto-fullstack-informatica-quinta/accountAdmin.php?utenteID=${utenteRowID}&action=eliminaUtente`,
-        {
-          method: "POST",
-          headers: headers,
-          body: JSON.stringify(formData),
-        }
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          if (data.success) {
-            toast.success("Utente eliminato con successo");
-            getUtenteClienteData();
-          } else if (data.error) {
-            toast.error(data.error);
-            console.log(
-              "Errore durante l'eliminazione dell'utente:",
-              data.error
-            );
-          }
-          console.log("Utente eliminato con successo", data);
-        })
-        .catch((error) =>
-          console.error("Errore durante l'eliminazione dell'utente:", error)
         );
     }, 2000);
   };
@@ -642,9 +682,13 @@ function AccountAdmin() {
             </div>
           </div>
           <div className="w-[100vw]" id="aggiungiCameraElement">
-            <form className="w-full flex flex-col justify-start items-start px-5 py-5 gap-5">
+            <form
+              onSubmit={handleSubmit}
+              className="w-full flex flex-col justify-start items-start px-5 py-5 gap-5"
+            >
               <button
                 type="button"
+                onClick={handleAggiungiImmagineCameraClick}
                 className="flex justify-center items-center border-none outline-none hover:scale-[.95] transition-transform duration-300 ease-in-out"
               >
                 <Plus color="#7E8794" />
@@ -665,9 +709,11 @@ function AccountAdmin() {
                       type="text"
                       required
                       id="nomeCameraInput"
-                      name="nomeCameraInput"
+                      name="nomeCamera"
                       className="bg-transparent outline-none border-none w-[9rem]"
                       placeholder="Nome camera"
+                      onChange={handleInputChange}
+                      value={cameraData.nomeCamera}
                     />
                   </div>
                 </div>
@@ -684,6 +730,8 @@ function AccountAdmin() {
                       name="tipoCamera"
                       id="tipoCamera"
                       className="bg-transparent outline-none border-none w-[9rem]"
+                      onChange={handleInputChange}
+                      value={cameraData.tipoCamera}
                     >
                       <option value="singola">Singola</option>
                       <option value="doppia">Doppia</option>
@@ -704,11 +752,13 @@ function AccountAdmin() {
                       type="number"
                       required
                       id="postiLettoInput"
-                      name="postiLettoInput"
+                      name="postiLetto"
                       className="bg-transparent outline-none border-none w-[9rem]"
                       placeholder="Posti letto"
                       min={1}
                       max={6}
+                      onChange={handleInputChange}
+                      value={cameraData.postiLetto}
                     />
                   </div>
                 </div>
@@ -726,11 +776,13 @@ function AccountAdmin() {
                       step={0.01}
                       required
                       id="prezzoInput"
-                      name="prezzoInput"
+                      name="prezzo"
                       className="bg-transparent outline-none border-none w-[9rem]"
                       placeholder="Prezzo"
                       min={20}
                       max={500}
+                      onChange={handleInputChange}
+                      value={cameraData.prezzo}
                     />
                   </div>
                 </div>
@@ -747,35 +799,46 @@ function AccountAdmin() {
                       type="text"
                       required
                       id="descrizioneCameraInput"
-                      name="descrizioneCameraInput"
+                      name="descrizione"
                       className="bg-transparent outline-none border-none w-[30rem]"
                       placeholder="Descrizione"
+                      onChange={handleInputChange}
+                      value={cameraData.descrizione}
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-col justify-center items-start">
-                  <label
-                    className="text-[#808080] text-md"
-                    htmlFor="immagineCameraInput"
+                {immagineCamera.map((immagine, index) => (
+                  <div
+                    key={immagine.id}
+                    className="flex flex-col justify-center items-start"
                   >
-                    Immagine camera
-                  </label>
-                  <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
-                    <input
-                      type="file"
-                      accept="image/jpg"
-                      required
-                      id="immagineCameraInput"
-                      name="immagineCameraInput"
-                      className="bg-transparent outline-none border-none w-[12rem]"
-                      placeholder="Immagine camera"
-                    />
-                    <label for="immagineCameraInput" className="cursor-pointer">
-                      <File color="#0B76B7" />
+                    <label
+                      className="text-[#808080] text-md"
+                      htmlFor="immagineCameraInput"
+                    >
+                      Immagine camera {index + 1}
                     </label>
+                    <div className="flex mt-2 justify-center items-center border-[1.5px] border-[#0B76B7] outline-none rounded-md px-1 py-1">
+                      <input
+                        type="file"
+                        accept="image/jpg"
+                        required
+                        id={`immagineCamera_${immagine.id}`}
+                        name={`immagineCamera_${immagine.id}`}
+                        className="immagineCameraInput bg-transparent outline-none border-none w-[12rem]"
+                        placeholder="Immagine camera"
+                        onChange={(e) => handleFileChange(e, immagine.id)}
+                      />
+                      <label
+                        for={`immagineCamera_${immagine.id}`}
+                        className="cursor-pointer"
+                      >
+                        <File color="#0B76B7" />
+                      </label>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
               <button
                 type="submit"

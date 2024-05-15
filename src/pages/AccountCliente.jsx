@@ -73,7 +73,7 @@ function AccountCliente() {
     };
 
     console.log(formData);
-    toast.loading("Prenotazione in corso...", { duration: 2000 });
+    toast.loading("Aggiornamento dei dati in corso...", { duration: 2000 });
 
     setTimeout(() => {
       fetch(
