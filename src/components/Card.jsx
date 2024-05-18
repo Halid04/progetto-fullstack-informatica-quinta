@@ -58,14 +58,6 @@ function Card({
           <span className="font-bold text-[#0B76B7]">{prezzo}</span>
         </p>
         <p>{newDescrizione}</p>
-
-        <button
-          type="button"
-          className="bg-[#0B76B7] px-5 py-1 rounded-md text-white hover:scale-90 active:scale-105 transition-transform duration-300 ease-in-out "
-          onClick={() => handleNavigateToPrenotazioneCamera(numeroCamera)}
-        >
-          Prenota subito
-        </button>
       </div>
     </div>
   );
